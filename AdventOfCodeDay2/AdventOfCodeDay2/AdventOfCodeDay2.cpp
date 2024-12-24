@@ -11,10 +11,10 @@ using namespace std;
 // USER INPUTS
 const int length = 1000;
 string fileName = "inputList.txt";
-bool partOne = true;
+bool partOne = false;
 
 int currentReport[20];
-int adjustedReport[20];
+int originalReport[20];
 string line;
 int currentReportLength = 0;
 
@@ -161,6 +161,46 @@ int main()
                 // instead of just checking the report as given. Must check every version of the report missing 1 level
                 // instead of just checking 1 2 3 4 5
                 // must also check 2 3 4 5 --- 1 3 4 5 --- 1 2 4 5 --- 1 2 3 5 --- 1 2 3 4
+
+                if (checkSafe())
+                {
+                    safeCounter++;
+                    cout << "SAFE" << endl;
+                }
+                else // initial report as given is unsafe. Must check for alterations
+                {
+                    for (int i = 0; i < currentReportLength; i++) // save original report
+                    {
+                        originalReport[i] = currentReport[i];
+                    }
+                    int skip = 0;
+                    currentReportLength -= 1;
+                    for (int i = 0; i < currentReportLength+1; i++) // i is the index being excluded
+                    {
+                        skip = 0;
+                        for (int j = 0; j < currentReportLength+1; j++) // constructing the adjusted report
+                        {
+                            if (i == j) 
+                            {
+                                skip = 1;
+                            }
+                            if ((j + skip) >= currentReportLength+1) 
+                            {}
+                            else 
+                            {
+                                currentReport[j] = originalReport[j + skip];
+                            }
+                        }
+                        if (checkSafe())
+                        {
+                            safeCounter++;
+                            cout << "SAFE" << endl;
+                            break;
+                        }
+                    }
+                    //cout << "UNSAFE" << endl;
+                }
+                
             }    
         }
     }
